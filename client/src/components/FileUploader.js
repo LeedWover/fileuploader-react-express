@@ -7,8 +7,10 @@ const FileUploader = () => {
   const [file, setFile] = useState("");
   const [filename, setFilename] = useState("Choose file");
   const [uploadedFile, setUploadedFile] = useState({});
-  const [message, setMessage] = useState('');
-  const [messageColor, setMessageColor] = useState('');
+  const [message, setMessage] = useState({
+    msg: '',
+    color: ''
+  });
 
   const handleChange = event => {
     setFile(event.target.files[0]);
@@ -29,22 +31,28 @@ const FileUploader = () => {
       });
       const { fileName, filePath } = res.data;
       setUploadedFile({ fileName, filePath });
-      setMessage('File Uploaded')
-      setMessageColor('success')
+      setMessage({
+        msg: 'File Uploaded',
+        color: 'success'
+      })
     } catch (err) {
       if (err.response.status === 500) {
-        setMessage("There was a problem with the server");
-        setMessageColor("danger");
+        setMessage({
+          msg: "There was a problem with the server",
+          color: 'danger'
+        });
       } else {
-        setMessage(err.response.data.msg);
-        setMessageColor("danger");
+        setMessage({
+          msg:err.response.data.msg,
+          color: 'danger'
+        });
       }
     }
   };
 
   return (
     <Fragment>
-      {message ? <Message color={messageColor} message={message} /> : null}
+      {message ? <Message color={message.color} message={message.msg} /> : null}
       <form onSubmit={handleSubmit}>
         <div className="custom-file mb-4">
           <input
